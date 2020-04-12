@@ -10,33 +10,30 @@ import static com.beightlyouch.yamaguchi.QuizDataCity.getCityNum;
 
 public class QuizMaker {
 
+    private int answer_city;
     private int answer_num;
     private ArrayList<Integer> choices;
     private int question_num;
-    private ArrayList<Integer> answers = new ArrayList<Integer>();
 
     //引数なしコンストラクタ
     public QuizMaker() {
     }
 
     //答えを決める
-    public int getAnswer_City() {
+    public void create_Answer_City() {
         Random rand = new Random();
         int answer = rand.nextInt(19);
-        while(!goodAnswer(answers, answer)) {
-            answer = rand.nextInt(19);
-        }
-        answers.add(answer);
-        return answer;
+        answer_city = answer;
     }
 
     public ArrayList<Integer> getWrongs() {
+        create_Answer_City();
         ArrayList<Integer> wrongs = new ArrayList<Integer>();
 
         while(wrongs.size() < 3){
             Random rand = new Random();
             int randomNumber = rand.nextInt(19);
-            if(goodWrongs(wrongs, randomNumber)){
+            if(goodWrongs(wrongs, answer_city, randomNumber)){
                 wrongs.add(randomNumber);
             }
         }
@@ -44,12 +41,15 @@ public class QuizMaker {
     }
 
     //4択を重複させない
-    public boolean goodWrongs(ArrayList<Integer> wrongs, int randomNumber){
+    public boolean goodWrongs(ArrayList<Integer> wrongs, int answer_city, int randomNumber){
         for(int i=0; i<wrongs.size(); i++){
-            if(wrongs.get(i)==randomNumber && getAnswer_City()==randomNumber){
-                Log.d("よろ", wrongs.toString());
+            Log.d("よろ", String.valueOf("比較対象の数字: " + String.valueOf(wrongs.get(i)) + " " + "答え: " + String.valueOf(getAnswer_City()) + " " + "入れたい数字: " + String.valueOf(randomNumber)));
+            if(wrongs.get(i)==randomNumber) {
                 return false;
             }
+        }
+        if(answer_city==randomNumber) {
+            return false;
         }
         return true;
     }
@@ -66,12 +66,13 @@ public class QuizMaker {
 
     public void createQuiz(){
         ArrayList<Integer> choices = getWrongs();
-        int answer = getAnswer_City();
-        choices.add(answer);
+        Log.d("答え市町村 ", String.valueOf(answer_city));
+        choices.add(answer_city);
+        Log.d("デバッグ", choices.toString());
         Collections.shuffle(choices);
 
         for(int i=0; i<4; i++) {
-            if(choices.get(i) == answer) {
+            if(choices.get(i) == answer_city) {
                 setAnswer_num(i);
             }
         }
@@ -82,6 +83,10 @@ public class QuizMaker {
     public int getAnswer_num() { return answer_num; }
 
     public void setAnswer_num(int answer_num) { this.answer_num = answer_num; }
+
+    public int getAnswer_City() { return answer_city; }
+
+    public void setAnswer_city(int answer_city) { this.answer_city = answer_city; }
 
     public ArrayList<Integer> getChoices() { return choices; }
 

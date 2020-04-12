@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity{
             QuizMaker qm = new QuizMaker();
             qm.createQuiz();
 
-            final ArrayList<Integer> choices = qm.getChoices();
-            final int answer_num = qm.getAnswer_num();
-            final int answer_city = qm.getAnswer_City();
+            ArrayList<Integer> choices = qm.getChoices();
+            int answer_num = qm.getAnswer_num();
+            int answer_city = qm.getAnswer_City();
             answer_cities.add(answer_city);
             problem_num.setText("第 "+problem+" 問");
             startQuiz(choices, answer_num);
@@ -87,12 +87,22 @@ public class MainActivity extends AppCompatActivity{
                     problem++;
                     scoreQuiz();
                     QuizMaker qm = new QuizMaker();
+                    //同じこと二回書いてるしつこいストーカー厳重注意
                     qm.createQuiz();
-                    final ArrayList<Integer> choices = qm.getChoices();
-                    final int answer_num = qm.getAnswer_num();
-                    final int answer_city = qm.getAnswer_City();
+                    ArrayList<Integer> choices =  qm.getChoices();
+                    int answer_num = qm.getAnswer_num();
+                    int answer_city = qm.getAnswer_City();
+
+                    while(!qm.goodAnswer(answer_cities, answer_city)) {
+                        qm.createQuiz();
+                        choices = qm.getChoices();
+                        answer_num = qm.getAnswer_num();
+                        answer_city = qm.getAnswer_City();
+                    }
                     answer_cities.add(answer_city);
                     startQuiz(choices, answer_num);
+
+
                     problem_num.setText("第 "+problem+" 問");
                 }else{
                     choice_one.setEnabled(false);
