@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class ResultActivity extends AppCompatActivity {
 
     private CustomRecyclerAdapter adapter;
@@ -48,8 +50,14 @@ public class ResultActivity extends AppCompatActivity {
         int[] check = intent.getIntArrayExtra("check");
 
         if(type == 1){
-            String[] city = intent.getStringArrayExtra("city");
-            adapter = new CustomRecyclerAdapter(city, check);
+            ArrayList<Integer> city = intent.getIntegerArrayListExtra("city");
+            String [] cities = new String[10];
+            for (int i = 0; i < 10; i++) {
+                String [][] poolcity = QuizDataCity.getPoolcity();
+                cities[i] = poolcity[1][city.get(i)];
+            }
+
+            adapter = new CustomRecyclerAdapter(cities, check);
         }else if(type == 2){
             String[] place = intent.getStringArrayExtra("place");
             adapter = new CustomRecyclerAdapter(place, check);

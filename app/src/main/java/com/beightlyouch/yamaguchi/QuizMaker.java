@@ -1,5 +1,7 @@
 package com.beightlyouch.yamaguchi;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -11,6 +13,7 @@ public class QuizMaker {
     private int answer_num;
     private ArrayList<Integer> choices;
     private int question_num;
+    private ArrayList<Integer> answers = new ArrayList<Integer>();
 
     //引数なしコンストラクタ
     public QuizMaker() {
@@ -20,10 +23,10 @@ public class QuizMaker {
     public int getAnswer_City() {
         Random rand = new Random();
         int answer = rand.nextInt(19);
-        MainActivity ma = new MainActivity();
-        while(badAnswer(ma.getAnswer_cities(), answer)) {
+        while(!goodAnswer(answers, answer)) {
             answer = rand.nextInt(19);
         }
+        answers.add(answer);
         return answer;
     }
 
@@ -43,7 +46,8 @@ public class QuizMaker {
     //4択を重複させない
     public boolean goodWrongs(ArrayList<Integer> wrongs, int randomNumber){
         for(int i=0; i<wrongs.size(); i++){
-            if(wrongs.get(i)==randomNumber || getAnswer_City()==randomNumber){
+            if(wrongs.get(i)==randomNumber && getAnswer_City()==randomNumber){
+                Log.d("よろ", wrongs.toString());
                 return false;
             }
         }
@@ -51,9 +55,9 @@ public class QuizMaker {
     }
 
     //出題市町村を重複させない
-    public boolean badAnswer(ArrayList<Integer> answer_cities, int answer){
-        for(int i=0; i<answer_cities.size(); i++){
-            if(answer_cities.get(i)!=answer){
+    public boolean goodAnswer(ArrayList<Integer> answers, int answer){
+        for(int i=0; i<answers.size(); i++){
+            if(answers.get(i)==answer){
                 return false;
             }
         }
@@ -81,15 +85,9 @@ public class QuizMaker {
 
     public ArrayList<Integer> getChoices() { return choices; }
 
-    public void setChoices(ArrayList<Integer> choices) {
-        this.choices = choices;
-    }
+    public void setChoices(ArrayList<Integer> choices) { this.choices = choices; }
 
-    public int getQuestion_num() {
-        return question_num;
-    }
+    public int getQuestion_num() { return question_num; }
 
-    public void setQuestion_num(int question_num) {
-        this.question_num = question_num;
-    }
+    public void setQuestion_num(int question_num) { this.question_num = question_num; }
 }
